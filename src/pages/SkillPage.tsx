@@ -1,30 +1,78 @@
-import { ArrowLeft, ArrowUpRight, Check, Cpu } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
 import { InternalLink } from "../components/Layout";
 import { skills } from "../data/content";
 
 export function SkillPage({ slug }: { slug: string }) {
-  const skill = skills.find(s => s.slug === slug);
-  if (!skill) return <div className="container not-found"><h1>Skill not found</h1><InternalLink to="/">Back home</InternalLink></div>;
-  return <div className="skill-page">
-    <section className={`skill-hero ${skill.accent}`}>
-      <div className="container">
-        <InternalLink to="/" className="back-link"><ArrowLeft size={15}/> Back to overview</InternalLink>
-        <div className="big-number">{skill.number}</div>
-        <span className="kicker">{skill.eyebrow}</span>
-        <h1>{skill.title}</h1>
-        <p>{skill.description}</p>
+  const skill = skills.find(item => item.slug === slug);
+
+  if (!skill) {
+    return (
+      <div className="container not-found">
+        <h1>Skill not found</h1>
+        <InternalLink to="/">Back home</InternalLink>
       </div>
-    </section>
-    <section className="container detail-grid">
-      <div className="detail-main">
-        <span className="kicker">WHAT I FOCUS ON</span>
-        <h2>Turning technical pieces into <em>working systems.</em></h2>
-        <div className="bullet-list">{skill.bullets.map(b => <div key={b}><Check size={17}/><span>{b}</span></div>)}</div>
-      </div>
-      <aside className="detail-side">
-        <div className="side-card"><Cpu size={20}/><span>TECH STACK</span><div className="tag-cloud">{skill.stack.map(x => <span key={x}>{x}</span>)}</div></div>
-        <InternalLink to="/blog" className="side-link">Read engineering notes <ArrowUpRight size={15}/></InternalLink>
-      </aside>
-    </section>
-  </div>;
+    );
+  }
+
+  return (
+    <>
+      <section className="skill-header container">
+        <InternalLink to="/" className="back-link">
+          <ArrowLeft size={15} /> Back home
+        </InternalLink>
+        <div className="skill-header-grid">
+          <div>
+            <p className="eyebrow">{skill.number} / {skill.eyebrow}</p>
+            <h1>{skill.title}</h1>
+          </div>
+          <p className="skill-lead">{skill.description}</p>
+        </div>
+      </section>
+
+      <section className="container detail-layout">
+        <main>
+          <p className="eyebrow">OVERVIEW</p>
+          <p className="detail-lead">{skill.overview}</p>
+
+          <div className="detail-block">
+            <p className="eyebrow">FOCUS AREAS</p>
+            <div className="focus-list">
+              {skill.bullets.map(item => (
+                <div key={item}>
+                  <Check size={16} />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+
+        <aside>
+          <div className="aside-block">
+            <p className="eyebrow">TECHNOLOGIES</p>
+            <div className="technology-list">
+              {skill.stack.map(item => <span key={item}>{item}</span>)}
+            </div>
+          </div>
+
+          <div className="aside-block">
+            <p className="eyebrow">REFERENCES</p>
+            <div className="reference-list">
+              {skill.links.map(link => (
+                <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
+                  {link.label} <ArrowUpRight size={14} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section className="container page-next">
+        <InternalLink to="/blog" className="underlined-link">
+          Read engineering notes <ArrowUpRight size={15} />
+        </InternalLink>
+      </section>
+    </>
+  );
 }
